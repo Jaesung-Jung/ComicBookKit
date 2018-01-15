@@ -1,0 +1,10 @@
+module minizip {
+    header "External/minizip/unzip.h"
+    export *
+}
+
+module RARKitPrivate {
+    header "Core/rar/RARHandle.h"
+    header "Core/rar/RARFileAttributes.h"
+    export *
+}
