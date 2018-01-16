@@ -38,7 +38,7 @@ class RARUnarchiver {
         self.handle.attributes()
             .filter { !$0.isDirectory }
             .sorted { (lhs, rhs) in
-                lhs.name > rhs.name
+                lhs.name < rhs.name
             }
     }()
 

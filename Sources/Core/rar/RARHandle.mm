@@ -98,8 +98,8 @@ typedef void(^RARReadHandler)(NSData *data);
         NSInteger result = 0;
 
         while ((result = RARReadHeaderEx(handle, &header)) == 0) {
-            NSString *name = [self stringFromUnichars:header.FileNameW];
-            if ([name isEqualToString:name]) {
+            NSString *filename = [self stringFromUnichars:header.FileNameW];
+            if ([filename isEqualToString:name]) {
                 uncompressedSize = header.UnpSizeHigh << 32 | header.UnpSize;
                 break;
             }
