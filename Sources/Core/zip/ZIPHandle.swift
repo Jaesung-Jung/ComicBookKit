@@ -63,9 +63,9 @@ class ZIPHandle {
 
         let bufferSize = Int(info.size_filename + 1)
         let buffer = UnsafeMutablePointer<CChar>.allocate(capacity: bufferSize)
-        buffer.initialize(to: 0, count: bufferSize)
+        buffer.initialize(repeating: 0, count: bufferSize)
         defer {
-            buffer.deallocate(capacity: bufferSize * MemoryLayout<CChar>.stride)
+            buffer.deallocate()
         }
 
         unzGetCurrentFileInfo64(handle, nil, buffer, UInt(bufferSize - 1), nil, 0, nil, 0)
@@ -98,9 +98,9 @@ class ZIPHandle {
 
     func read(length: Int = .max) -> Data? {
         let bufferSize = Swift.min(65536, length)
-        var buffer = UnsafeMutablePointer<UInt8>.allocate(capacity: bufferSize)
+        let buffer = UnsafeMutablePointer<UInt8>.allocate(capacity: bufferSize)
         defer {
-            buffer.deallocate(capacity: bufferSize * MemoryLayout<UInt8>.stride)
+            buffer.deallocate()
         }
         return read(on: buffer, bufferSize: bufferSize, readLength: length)
     }
@@ -152,10 +152,10 @@ extension String {
         guard last != "/" else {
             return self
         }
-        guard let reversedIndex = reversed().index(of: "/") else {
+        guard let reversedIndex = lastIndex(of: "/") else {
             return self
         }
-        return String(self[reversedIndex.base...])
+        return String(self[reversedIndex...])
     }
 
     var pathExtension: String {

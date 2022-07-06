@@ -64,7 +64,7 @@ public class CBZDocument: ComicBookDocument<UInt64> {
 
     private func makePages(unarchiver: ZIPUnarchiver) -> [ComicBookDocumentPage] {
         return unarchiver.fileAttributes
-            .flatMap { unarchiver.iterator(offset: $0.offset) }
+            .compactMap { unarchiver.iterator(offset: $0.offset) }
             .flatMap { iterator -> [ComicBookDocumentPage] in
                 var data = Data()
                 var format: ImageFormat?

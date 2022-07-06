@@ -29,8 +29,15 @@ extension Data {
     }
 
     func fixedWidthInteger<T>(_ type: T.Type) -> T where T: FixedWidthInteger {
-        return withUnsafeBytes { (p: UnsafePointer<UInt8>) in
-            p.withMemoryRebound(to: type, capacity: 1) { $0 }
-        }.pointee
+        var value: T = 0
+        let memorySize = MemoryLayout<T>.size
+        Swift.withUnsafeMutableBytes(of: &value) { mutablePointer in
+            if memorySize < count {
+                mutablePointer.copyBytes(from: self[..<memorySize])
+            } else {
+                mutablePointer.copyBytes(from: self)
+            }
+        }
+        return value
     }
 }

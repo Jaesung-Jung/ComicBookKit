@@ -26,13 +26,13 @@ import XCTest
 
 class DataExtensionTests: XCTestCase {
     func testHasPrefix() {
-        let prefix = Data(bytes: [0, 1, 2])
-        let data = Data(bytes: [0, 1, 2, 3, 4, 5])
+        let prefix = Data([0, 1, 2])
+        let data = Data([0, 1, 2, 3, 4, 5])
         XCTAssertTrue(data.hasPrefix(prefix))
     }
 
     func testFixedWidthInteger() {
-        let data = Data(bytes: [1, 0, 0, 0])
+        let data = Data([1, 0, 0, 0])
         // byte order 00 00 00 01
         XCTAssertEqual(data.fixedWidthInteger(UInt32.self).littleEndian, 1)
         // byte order 01 00 00 00

@@ -40,7 +40,7 @@ class ZIPDataIterator: IteratorProtocol {
     }
 
     deinit {
-        buffer.deallocate(capacity: bufferSize * MemoryLayout<UInt8>.stride)
+        buffer.deallocate()
         handle.closeCurrentFile()
     }
 
