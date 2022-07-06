@@ -24,63 +24,63 @@
 import Foundation
 
 struct ZIPFileAttributes {
-    let path: String
-    let fileExtension: String
-    let isDirectory: Bool
-    let isHidden: Bool
-    let offset: UInt64
-    let compressedSize: UInt64
-    let uncompressedSize: UInt64
-    let crc: UInt
+  let path: String
+  let fileExtension: String
+  let isDirectory: Bool
+  let isHidden: Bool
+  let offset: UInt64
+  let compressedSize: UInt64
+  let uncompressedSize: UInt64
+  let crc: UInt
 }
 
 extension ZIPFileAttributes: Comparable {
-    static func<(lhs: ZIPFileAttributes, rhs: ZIPFileAttributes) -> Bool {
-        let l = lhs.path.split(separator: "/")
-        let r = rhs.path.split(separator: "/")
-        let range = 0..<max(l.count, r.count)
-        for index in range {
-            if !l.indices.contains(index) {
-                return true
-            }
-            if !r.indices.contains(index) {
-                return false
-            }
-            if l[index].lowercased() > r[index].lowercased() {
-                if l.count == 1 && r.count > 1 {
-                    return true
-                }
-                return false
-            }
-            if l[index].lowercased() < r[index].lowercased() {
-                if r.count == 1 && l.count > 1 {
-                    return false
-                }
-                return true
-            }
-        }
-        if l.count < r.count {
-            return true
-        }
-        if l.count > r.count {
-            return false
+  static func<(lhs: ZIPFileAttributes, rhs: ZIPFileAttributes) -> Bool {
+    let l = lhs.path.split(separator: "/")
+    let r = rhs.path.split(separator: "/")
+    let range = 0..<max(l.count, r.count)
+    for index in range {
+      if !l.indices.contains(index) {
+        return true
+      }
+      if !r.indices.contains(index) {
+        return false
+      }
+      if l[index].lowercased() > r[index].lowercased() {
+        if l.count == 1 && r.count > 1 {
+          return true
         }
         return false
+      }
+      if l[index].lowercased() < r[index].lowercased() {
+        if r.count == 1 && l.count > 1 {
+          return false
+        }
+        return true
+      }
     }
+    if l.count < r.count {
+      return true
+    }
+    if l.count > r.count {
+      return false
+    }
+    return false
+  }
 
-    static func>(lhs: ZIPFileAttributes, rhs: ZIPFileAttributes) -> Bool {
-        return !(lhs < rhs)
-    }
+  static func>(lhs: ZIPFileAttributes, rhs: ZIPFileAttributes) -> Bool {
+    return !(lhs < rhs)
+  }
 
-    static func<=(lhs: ZIPFileAttributes, rhs: ZIPFileAttributes) -> Bool {
-        return lhs == rhs || lhs < rhs
-    }
+  static func<=(lhs: ZIPFileAttributes, rhs: ZIPFileAttributes) -> Bool {
+    return lhs == rhs || lhs < rhs
+  }
 
-    static func>=(lhs: ZIPFileAttributes, rhs: ZIPFileAttributes) -> Bool {
-        return lhs == rhs || lhs > rhs
-    }
+  static func>=(lhs: ZIPFileAttributes, rhs: ZIPFileAttributes) -> Bool {
+    return lhs == rhs || lhs > rhs
+  }
 
-    static func==(lhs: ZIPFileAttributes, rhs: ZIPFileAttributes) -> Bool {
-        return lhs.path == rhs.path
-    }
+  static func==(lhs: ZIPFileAttributes, rhs: ZIPFileAttributes) -> Bool {
+    return lhs.path == rhs.path
+  }
 }

@@ -25,67 +25,67 @@ import XCTest
 @testable import ComicBookKit
 
 class CBRDocumentTests: XCTestCase, BundleResourceAccessible {
-    var document: CBRDocument!
+  var document: CBRDocument!
 
-    override func setUp() {
-        super.setUp()
-        document = CBRDocument(url: rarURL)
-    }
+  override func setUp() {
+    super.setUp()
+    document = CBRDocument(url: rarURL)
+  }
 
-    func testCreation() {
-        XCTAssertNotNil(document)
-        XCTAssertEqual(document?.url, rarURL)
-    }
+  func testCreation() {
+    XCTAssertNotNil(document)
+    XCTAssertEqual(document?.url, rarURL)
+  }
 
-    func testPages() {
-        XCTAssertEqual(document?.pageCount, 12)
+  func testPages() {
+    XCTAssertEqual(document?.pageCount, 12)
 
-        let first = document?.pages[0]
-        XCTAssertEqual(first?.method, .left)
-        XCTAssertEqual(first?.rect, CGRect(x: 0, y: 0, width: 480, height: 640))
+    let first = document?.pages[0]
+    XCTAssertEqual(first?.method, .left)
+    XCTAssertEqual(first?.rect, CGRect(x: 0, y: 0, width: 480, height: 640))
 
-        let second = document?.pages[1]
-        XCTAssertEqual(second?.method, .right)
-        XCTAssertEqual(second?.rect, CGRect(x: 480, y: 0, width: 480, height: 640))
-    }
+    let second = document?.pages[1]
+    XCTAssertEqual(second?.method, .right)
+    XCTAssertEqual(second?.rect, CGRect(x: 480, y: 0, width: 480, height: 640))
+  }
 
-    func testImages() {
-        let firstImage = document.image(at: 0)
-        XCTAssertNotNil(firstImage)
-        XCTAssertEqual(firstImage?.size, CGSize(width: 480, height: 640))
+  func testImages() {
+    let firstImage = document.image(at: 0)
+    XCTAssertNotNil(firstImage)
+    XCTAssertEqual(firstImage?.size, CGSize(width: 480, height: 640))
 
-        let secondImage = document.image(at: 1)
-        XCTAssertNotNil(secondImage)
-        XCTAssertEqual(secondImage?.size, CGSize(width: 480, height: 640))
-    }
+    let secondImage = document.image(at: 1)
+    XCTAssertNotNil(secondImage)
+    XCTAssertEqual(secondImage?.size, CGSize(width: 480, height: 640))
+  }
 
-    func testRightToLeft() {
-        let document = CBRDocument(url: rarURL, rightToLeft: true)
-        let rfirst = document?.pages[0]
-        XCTAssertEqual(rfirst?.method, .right)
+  func testRightToLeft() {
+    let document = CBRDocument(url: rarURL, rightToLeft: true)
+    let rfirst = document?.pages[0]
+    XCTAssertEqual(rfirst?.method, .right)
 
-        let rsecond = document?.pages[1]
-        XCTAssertEqual(rsecond?.method, .left)
+    let rsecond = document?.pages[1]
+    XCTAssertEqual(rsecond?.method, .left)
 
-        document?.rightToLeft = false
-        let lfirst = document?.pages[0]
-        XCTAssertEqual(lfirst?.method, .left)
+    document?.rightToLeft = false
+    let lfirst = document?.pages[0]
+    XCTAssertEqual(lfirst?.method, .left)
 
-        let lsecond = document?.pages[1]
-        XCTAssertEqual(lsecond?.method, .right)
-    }
+    let lsecond = document?.pages[1]
+    XCTAssertEqual(lsecond?.method, .right)
+  }
 
-    func testPassword() {
-        let url = self.url(name: "enc-sample", withExtension: "rar")
-        let document = CBRDocument(url: url)
+  func testPassword() {
+    let url = self.url(name: "enc-sample", withExtension: "rar")
+    let document = CBRDocument(url: url)
 
-        XCTAssertTrue(document?.isEncrypted ?? false)
-        XCTAssertNil(document?.image(at: 0))
+    XCTAssertTrue(document?.isEncrypted ?? false)
+    XCTAssertNil(document?.image(at: 0))
+    
+    XCTAssertFalse(document?.validatePassword("****") ?? true)
+    XCTAssertTrue(document?.validatePassword("1234") ?? false)
 
-        XCTAssertFalse(document?.validatePassword("****") ?? true)
-        XCTAssertTrue(document?.validatePassword("1234") ?? false)
-
-        document?.password = "1234"
-        XCTAssertNotNil(document?.image(at: 0))
-    }
+    document?.password = "1234"
+    XCTAssertNotNil(document?.image(at: 0))
+  }
 }

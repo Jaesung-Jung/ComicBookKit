@@ -22,29 +22,29 @@
 //  THE SOFTWARE.
 
 class ZIPDataIterator: IteratorProtocol {
-    private let handle: ZIPHandle
-    private let password: String?
-    private let buffer: UnsafeMutablePointer<UInt8>
-    private let bufferSize: Int
+  private let handle: ZIPHandle
+  private let password: String?
+  private let buffer: UnsafeMutablePointer<UInt8>
+  private let bufferSize: Int
 
-    let offset: UInt64
+  let offset: UInt64
 
-    init(handle: ZIPHandle, password: String?, offset: UInt64, bufferSize: Int) {
-        self.handle = handle
-        self.password = password
-        self.buffer = UnsafeMutablePointer<UInt8>.allocate(capacity: bufferSize)
-        self.bufferSize = bufferSize
-        self.offset = offset
-        handle.seek(to: offset)
-        handle.openCurrentFile()
-    }
+  init(handle: ZIPHandle, password: String?, offset: UInt64, bufferSize: Int) {
+    self.handle = handle
+    self.password = password
+    self.buffer = UnsafeMutablePointer<UInt8>.allocate(capacity: bufferSize)
+    self.bufferSize = bufferSize
+    self.offset = offset
+    handle.seek(to: offset)
+    handle.openCurrentFile()
+  }
 
-    deinit {
-        buffer.deallocate()
-        handle.closeCurrentFile()
-    }
+  deinit {
+    buffer.deallocate()
+    handle.closeCurrentFile()
+  }
 
-    func next() -> Data? {
-        return handle.read(on: buffer, bufferSize: bufferSize, readLength: bufferSize)
-    }
+  func next() -> Data? {
+    return handle.read(on: buffer, bufferSize: bufferSize, readLength: bufferSize)
+  }
 }

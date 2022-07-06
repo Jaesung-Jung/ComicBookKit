@@ -24,88 +24,89 @@
 import UIKit
 
 public class ComicBookDocument<Key: Hashable> {
-    private let cache = Cache<Key, UIImage>(capacity: 5)
-    var pages: [ComicBookDocumentPage] = []
+  private let cache = Cache<Key, UIImage>(capacity: 5)
 
-    public var pageCount: Int {
-        return pages.count
+  var pages: [ComicBookDocumentPage] = []
+
+  public var pageCount: Int {
+    return pages.count
+  }
+
+  public var isEncrypted: Bool {
+    return false
+  }
+
+  public var password: String?
+
+  public var rightToLeft: Bool = false {
+    didSet {
+      if rightToLeft != oldValue {
+        didUpdatePageDirection(rightToLeft)
+      }
+    }
+  }
+
+  init() {
+  }
+
+  public func image(at index: Int) -> UIImage? {
+    guard pages.indices.contains(index) else {
+      return nil
     }
 
-    public var isEncrypted: Bool {
-        return false
+    let page = pages[index]
+    guard let image = image(of: page.key) else {
+      return nil
+    }
+    switch page.method {
+    case .fill:
+      return image
+    case .left, .right:
+      return image.cropping(to: page.rect)
+    }
+  }
+
+  func image(of key: Key) -> UIImage? {
+    if let image = cache[key] {
+      return image
     }
 
-    public var password: String?
-
-    public var rightToLeft: Bool = false {
-        didSet {
-            if rightToLeft != oldValue {
-                didUpdatePageDirection(rightToLeft)
-            }
-        }
+    guard let data = data(of: key), let image = UIImage(data: data) else {
+      return nil
     }
+    cache[key] = image
+    return image
+  }
 
-    init() {
+  func data(of key: Key) -> Data? {
+    fatalError()
+  }
+
+  func validatePassword(_ password: String) -> Bool {
+    fatalError()
+  }
+
+  func didUpdatePageDirection(_ rightToLeft: Bool) {
+    pages = pages.map { page in
+      switch page.method {
+      case .fill:
+        return page
+      case .left:
+        return ComicBookDocumentPage(key: page.key, size: page.size, method: .right)
+      case .right:
+        return ComicBookDocumentPage(key: page.key, size: page.size, method: .left)
+      }
     }
-
-    public func image(at index: Int) -> UIImage? {
-        guard pages.indices.contains(index) else {
-            return nil
-        }
-
-        let page = pages[index]
-        guard let image = image(of: page.key) else {
-            return nil
-        }
-        switch page.method {
-        case .fill:
-            return image
-        case .left, .right:
-            return image.cropping(to: page.rect)
-        }
-    }
-
-    func image(of key: Key) -> UIImage? {
-        if let image = cache[key] {
-            return image
-        }
-
-        guard let data = data(of: key), let image = UIImage(data: data) else {
-            return nil
-        }
-        cache[key] = image
-        return image
-    }
-
-    func data(of key: Key) -> Data? {
-        fatalError()
-    }
-
-    func validatePassword(_ password: String) -> Bool {
-        fatalError()
-    }
-
-    func didUpdatePageDirection(_ rightToLeft: Bool) {
-        pages = pages.map { page in
-            switch page.method {
-            case .fill:
-                return page
-            case .left:
-                return ComicBookDocumentPage(key: page.key, size: page.size, method: .right)
-            case .right:
-                return ComicBookDocumentPage(key: page.key, size: page.size, method: .left)
-            }
-        }
-    }
+  }
 }
 
 extension ComicBookDocument {
-    struct ComicBookDocumentPage {
-        let key: Key
-        let size: CGSize
-        let method: RenderingMethod
-        var rect: CGRect {
-            return method.rect(of: size)
-        }
+  struct ComicBookDocumentPage {
+    let key: Key
+    let size: CGSize
+    let method: RenderingMethod
+    var rect: CGRect {
+      return method.rect(of: size)
     }
+  }
 }

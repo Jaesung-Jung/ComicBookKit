@@ -25,40 +25,40 @@ import XCTest
 @testable import ComicBookKit
 
 class KeyListTests: XCTestCase {
-    func testKeyList() {
-        let list = KeyList<Int>()
-        XCTAssertTrue(list.map { $0 }.isEmpty)
+  func testKeyList() {
+    let list = KeyList<Int>()
+    XCTAssertTrue(list.map { $0 }.isEmpty)
 
-        list.append(1)
-        list.append(2)
-        list.append(3)
-        XCTAssertEqual(list.count, 3)
-        XCTAssertEqual(list.map { $0 }, [1, 2, 3])
+    list.append(1)
+    list.append(2)
+    list.append(3)
+    XCTAssertEqual(list.count, 3)
+    XCTAssertEqual(list.map { $0 }, [1, 2, 3])
 
-        list.removeFirst()
-        XCTAssertEqual(list.count, 2)
-        XCTAssertEqual(list.map { $0 }, [2, 3])
+    list.removeFirst()
+    XCTAssertEqual(list.count, 2)
+    XCTAssertEqual(list.map { $0 }, [2, 3])
 
-        list.moveToLast(value: 1)
-        XCTAssertEqual(list.count, 2)
-        XCTAssertEqual(list.map { $0 }, [2, 3])
+    list.moveToLast(value: 1)
+    XCTAssertEqual(list.count, 2)
+    XCTAssertEqual(list.map { $0 }, [2, 3])
 
-        list.moveToLast(value: 2)
-        XCTAssertEqual(list.count, 2)
-        XCTAssertEqual(list.map { $0 }, [3, 2])
+    list.moveToLast(value: 2)
+    XCTAssertEqual(list.count, 2)
+    XCTAssertEqual(list.map { $0 }, [3, 2])
 
-        list.append(1)
-        list.moveToLast(value: 2)
-        list.moveToLast(value: 3)
-        list.append(4)
-        list.append(5)
-        list.append(6)
-        list.append(7)
-        list.append(8)
-        list.moveToLast(value: 4)
-        list.moveToLast(value: 5)
-        list.moveToLast(value: 8)
-        list.moveToLast(value: 8)
-        XCTAssertEqual(list.map { $0 }, [1, 2, 3, 6, 7, 4, 5, 8])
-    }
+    list.append(1)
+    list.moveToLast(value: 2)
+    list.moveToLast(value: 3)
+    list.append(4)
+    list.append(5)
+    list.append(6)
+    list.append(7)
+    list.append(8)
+    list.moveToLast(value: 4)
+    list.moveToLast(value: 5)
+    list.moveToLast(value: 8)
+    list.moveToLast(value: 8)
+    XCTAssertEqual(list.map { $0 }, [1, 2, 3, 6, 7, 4, 5, 8])
+  }
 }

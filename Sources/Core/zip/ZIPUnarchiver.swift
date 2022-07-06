@@ -25,76 +25,76 @@ import Foundation
 import minizip
 
 class ZIPUnarchiver {
-    let fileURL: URL
-    let isEncrypted: Bool
-    var password: String?
-    lazy var fileAttributes: [ZIPFileAttributes] = {
-        ZIPHandle(path: self.fileURL.path, password: password)!
-            .map { $0.attributes() }
-            .filter { !$0.isDirectory && !$0.isHidden && !$0.path.hasPrefix("__MACOSX/") }
-            .sorted()
-    }()
+  let fileURL: URL
+  let isEncrypted: Bool
+  var password: String?
+  lazy var fileAttributes: [ZIPFileAttributes] = {
+    ZIPHandle(path: self.fileURL.path, password: password)!
+      .map { $0.attributes() }
+      .filter { !$0.isDirectory && !$0.isHidden && !$0.path.hasPrefix("__MACOSX/") }
+      .sorted()
+  }()
 
-    init?(contentsOf url: URL) {
-        guard let handle = ZIPHandle(path: url.path) else {
-            return nil
-        }
-        fileURL = url
-        handle.openCurrentFile()
-        isEncrypted = handle.read(length: 1) == nil
-        handle.closeCurrentFile()
+  init?(contentsOf url: URL) {
+    guard let handle = ZIPHandle(path: url.path) else {
+      return nil
     }
+    fileURL = url
+    handle.openCurrentFile()
+    isEncrypted = handle.read(length: 1) == nil
+    handle.closeCurrentFile()
+  }
 
-    func unarchive(at index: Int) -> Data? {
-        guard let attributes = attributes(at: index) else {
-            return nil
-        }
-        return unarchive(offset: attributes.offset)
+  func unarchive(at index: Int) -> Data? {
+    guard let attributes = attributes(at: index) else {
+      return nil
     }
+    return unarchive(offset: attributes.offset)
+  }
 
-    func unarchive(offset: UInt64) -> Data? {
-        guard let handle = ZIPHandle(path: fileURL.path, password: password) else {
-            return nil
-        }
-        handle.seek(to: offset)
-        handle.openCurrentFile()
-        defer {
-            handle.closeCurrentFile()
-        }
-        return handle.read()
+  func unarchive(offset: UInt64) -> Data? {
+    guard let handle = ZIPHandle(path: fileURL.path, password: password) else {
+      return nil
     }
+    handle.seek(to: offset)
+    handle.openCurrentFile()
+    defer {
+      handle.closeCurrentFile()
+    }
+    return handle.read()
+  }
 
-    func iterator(at index: Int) -> ZIPDataIterator? {
-        guard let attributes = attributes(at: index) else {
-            return nil
-        }
-        return iterator(offset: attributes.offset)
+  func iterator(at index: Int) -> ZIPDataIterator? {
+    guard let attributes = attributes(at: index) else {
+      return nil
     }
+    return iterator(offset: attributes.offset)
+  }
 
-    func iterator(offset: UInt64) -> ZIPDataIterator? {
-        guard let handle = ZIPHandle(path: fileURL.path, password: password) else {
-            return nil
-        }
-        return ZIPDataIterator(handle: handle, password: password, offset: offset, bufferSize: 4096)
+  func iterator(offset: UInt64) -> ZIPDataIterator? {
+    guard let handle = ZIPHandle(path: fileURL.path, password: password) else {
+      return nil
     }
-
-    func validatePassword(_ password: String) -> Bool {
-        guard let handle = ZIPHandle(path: fileURL.path, password: password) else {
-            return false
-        }
-        handle.openCurrentFile()
-        defer {
-            handle.closeCurrentFile()
-        }
-        return handle.read(length: 1) != nil
+    return ZIPDataIterator(handle: handle, password: password, offset: offset, bufferSize: 4096)
+  }
+  
+  func validatePassword(_ password: String) -> Bool {
+    guard let handle = ZIPHandle(path: fileURL.path, password: password) else {
+      return false
     }
+    handle.openCurrentFile()
+    defer {
+      handle.closeCurrentFile()
+    }
+    return handle.read(length: 1) != nil
+  }
 }
 
 extension ZIPUnarchiver {
-    private func attributes(at index: Int) -> ZIPFileAttributes? {
-        guard fileAttributes.indices.contains(index) else {
-            return nil
-        }
-        return fileAttributes[index]
+  private func attributes(at index: Int) -> ZIPFileAttributes? {
+    guard fileAttributes.indices.contains(index) else {
+      return nil
     }
+    return fileAttributes[index]
+  }
 }

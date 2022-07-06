@@ -203,8 +203,8 @@
 		4B3E26292007EFA2007A55C0 /* ZIPHandleTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZIPHandleTests.swift; sourceTree = "<group>"; };
 		4B3E262B2007F473007A55C0 /* ZIPUnarchiverTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZIPUnarchiverTests.swift; sourceTree = "<group>"; };
 		4B3E262D2008C4E4007A55C0 /* ZIPDataIterator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZIPDataIterator.swift; sourceTree = "<group>"; };
-		4B3EE4D8200B860300922FC1 /* RARHandle.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RARHandle.h; sourceTree = "<group>"; };
-		4B3EE4D9200B860300922FC1 /* RARHandle.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = RARHandle.mm; sourceTree = "<group>"; };
+		4B3EE4D8200B860300922FC1 /* RARHandle.h */ = {isa = PBXFileReference; indentWidth = 4; lastKnownFileType = sourcecode.c.h; path = RARHandle.h; sourceTree = "<group>"; tabWidth = 4; };
+		4B3EE4D9200B860300922FC1 /* RARHandle.mm */ = {isa = PBXFileReference; indentWidth = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = RARHandle.mm; sourceTree = "<group>"; tabWidth = 4; };
 		4B3EE4DE200B863200922FC1 /* options.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = options.cpp; sourceTree = "<group>"; };
 		4B3EE4DF200B863200922FC1 /* timefn.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = timefn.hpp; sourceTree = "<group>"; };
 		4B3EE4E0200B863200922FC1 /* unpack30.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = unpack30.cpp; sourceTree = "<group>"; };
@@ -357,8 +357,8 @@
 		4B3EE573200B863E00922FC1 /* smallfn.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = smallfn.hpp; sourceTree = "<group>"; };
 		4B3EE574200B863E00922FC1 /* timefn.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = timefn.cpp; sourceTree = "<group>"; };
 		4B3EE575200B863F00922FC1 /* ui.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ui.cpp; sourceTree = "<group>"; };
-		4B3EE644200BBFD100922FC1 /* RARFileAttributes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RARFileAttributes.h; sourceTree = "<group>"; };
-		4B3EE645200BBFD100922FC1 /* RARFileAttributes.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RARFileAttributes.m; sourceTree = "<group>"; };
+		4B3EE644200BBFD100922FC1 /* RARFileAttributes.h */ = {isa = PBXFileReference; indentWidth = 4; lastKnownFileType = sourcecode.c.h; path = RARFileAttributes.h; sourceTree = "<group>"; tabWidth = 4; };
+		4B3EE645200BBFD100922FC1 /* RARFileAttributes.m */ = {isa = PBXFileReference; indentWidth = 4; lastKnownFileType = sourcecode.c.objc; path = RARFileAttributes.m; sourceTree = "<group>"; tabWidth = 4; };
 		4B3EE648200BCAD500922FC1 /* sample.rar */ = {isa = PBXFileReference; lastKnownFileType = file; path = sample.rar; sourceTree = "<group>"; };
 		4B3EE64A200BCB0C00922FC1 /* RARHandleTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RARHandleTests.swift; sourceTree = "<group>"; };
 		4B3EE64C200BE83500922FC1 /* RARUnarchiver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RARUnarchiver.swift; sourceTree = "<group>"; };
@@ -607,9 +607,9 @@
 				4B942C862007845A009CDCE0 /* Tests */,
 				4B942C64200782A6009CDCE0 /* Products */,
 			);
-			indentWidth = 4;
+			indentWidth = 2;
 			sourceTree = "<group>";
-			tabWidth = 4;
+			tabWidth = 2;
 		};
 		4B942C64200782A6009CDCE0 /* Products */ = {
 			isa = PBXGroup;

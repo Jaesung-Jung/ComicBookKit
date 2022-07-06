@@ -24,10 +24,10 @@
 import UIKit.UIImage
 
 extension UIImage {
-    func cropping(to rect: CGRect) -> UIImage? {
-        guard let croppedImage = cgImage?.cropping(to: rect) else {
-            return nil
-        }
-        return UIImage(cgImage: croppedImage, scale: scale, orientation: imageOrientation)
+  func cropping(to rect: CGRect) -> UIImage? {
+    guard let croppedImage = cgImage?.cropping(to: rect) else {
+      return nil
     }
+    return UIImage(cgImage: croppedImage, scale: scale, orientation: imageOrientation)
+  }
 }

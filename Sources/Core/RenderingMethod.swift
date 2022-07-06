@@ -24,16 +24,16 @@
 import CoreGraphics
 
 enum RenderingMethod {
-    case fill, left, right
+  case fill, left, right
 
-    func rect(of size: CGSize) -> CGRect {
-        switch self {
-        case .fill:
-            return CGRect(origin: .zero, size: size)
-        case .left:
-            return CGRect(x: 0, y: 0, width: size.width * 0.5, height: size.height)
-        case .right:
-            return CGRect(x: size.width * 0.5, y: 0, width: size.width * 0.5, height: size.height)
-        }
+  func rect(of size: CGSize) -> CGRect {
+    switch self {
+    case .fill:
+      return CGRect(origin: .zero, size: size)
+    case .left:
+      return CGRect(x: 0, y: 0, width: size.width * 0.5, height: size.height)
+    case .right:
+      return CGRect(x: size.width * 0.5, y: 0, width: size.width * 0.5, height: size.height)
     }
+  }
 }

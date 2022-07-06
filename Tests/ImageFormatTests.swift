@@ -25,10 +25,10 @@ import XCTest
 @testable import ComicBookKit
 
 class ImageFormatTests: XCTestCase, BundleResourceAccessible {
-    func testImageFormat() {
-        XCTAssertEqual(ImageFormat(data: bmp),  .bmp)
-        XCTAssertEqual(ImageFormat(data: gif),  .gif)
-        XCTAssertEqual(ImageFormat(data: jpeg), .jpeg)
-        XCTAssertEqual(ImageFormat(data: png),  .png)
-    }
+  func testImageFormat() {
+    XCTAssertEqual(ImageFormat(data: bmp),  .bmp)
+    XCTAssertEqual(ImageFormat(data: gif),  .gif)
+    XCTAssertEqual(ImageFormat(data: jpeg), .jpeg)
+    XCTAssertEqual(ImageFormat(data: png),  .png)
+  }
 }

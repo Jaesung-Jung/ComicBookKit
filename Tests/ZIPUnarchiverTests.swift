@@ -25,51 +25,51 @@ import XCTest
 @testable import ComicBookKit
 
 class ZIPUnarchiverTests: XCTestCase, BundleResourceAccessible {
-    private var unarchiver: ZIPUnarchiver!
+  private var unarchiver: ZIPUnarchiver!
 
-    override func setUp() {
-        super.setUp()
-        unarchiver = ZIPUnarchiver(contentsOf: zipURL)
+  override func setUp() {
+    super.setUp()
+    unarchiver = ZIPUnarchiver(contentsOf: zipURL)
+  }
+
+  func testCreation() {
+    XCTAssertNotNil(unarchiver)
+    XCTAssertEqual(unarchiver?.isEncrypted, false)
+  }
+
+  func testAttributes() {
+    let attributes = unarchiver.fileAttributes
+    XCTAssertEqual(attributes.count, 6)
+    XCTAssertEqual(attributes[0].path, "01.jpg")
+    XCTAssertEqual(attributes[0].isDirectory, false)
+    XCTAssertEqual(attributes[0].isHidden, false)
+    XCTAssertEqual(attributes[0].fileExtension, "jpg")
+    XCTAssertEqual(attributes[0].compressedSize, 122697)
+    XCTAssertEqual(attributes[0].uncompressedSize, 122804)
+    XCTAssertEqual(attributes[0].crc, 2324891915)
+    XCTAssertEqual(attributes[0].offset, 685722)
+  }
+
+  func testUnarchive() {
+    guard let data = unarchiver.unarchive(at: 0) else {
+      XCTFail("Failed unarchive")
+      return
     }
+    let image = UIImage(data: data)
+    XCTAssertNotNil(image)
+    XCTAssertEqual(image?.size, CGSize(width: 960, height: 640))
+  }
 
-    func testCreation() {
-        XCTAssertNotNil(unarchiver)
-        XCTAssertEqual(unarchiver?.isEncrypted, false)
+  func testIterator() {
+    let iterator = unarchiver.iterator(at: 0)
+    var data = Data()
+    while let readedData = iterator?.next() {
+      data.append(readedData)
     }
+    XCTAssertFalse(data.isEmpty)
 
-    func testAttributes() {
-        let attributes = unarchiver.fileAttributes
-        XCTAssertEqual(attributes.count, 6)
-        XCTAssertEqual(attributes[0].path, "01.jpg")
-        XCTAssertEqual(attributes[0].isDirectory, false)
-        XCTAssertEqual(attributes[0].isHidden, false)
-        XCTAssertEqual(attributes[0].fileExtension, "jpg")
-        XCTAssertEqual(attributes[0].compressedSize, 122697)
-        XCTAssertEqual(attributes[0].uncompressedSize, 122804)
-        XCTAssertEqual(attributes[0].crc, 2324891915)
-        XCTAssertEqual(attributes[0].offset, 685722)
-    }
-
-    func testUnarchive() {
-        guard let data = unarchiver.unarchive(at: 0) else {
-            XCTFail("Failed unarchive")
-            return
-        }
-        let image = UIImage(data: data)
-        XCTAssertNotNil(image)
-        XCTAssertEqual(image?.size, CGSize(width: 960, height: 640))
-    }
-
-    func testIterator() {
-        let iterator = unarchiver.iterator(at: 0)
-        var data = Data()
-        while let readedData = iterator?.next() {
-            data.append(readedData)
-        }
-        XCTAssertFalse(data.isEmpty)
-
-        let image = UIImage(data: data)
-        XCTAssertNotNil(image)
-        XCTAssertEqual(image?.size, CGSize(width: 960, height: 640))
-    }
+    let image = UIImage(data: data)
+    XCTAssertNotNil(image)
+    XCTAssertEqual(image?.size, CGSize(width: 960, height: 640))
+  }
 }

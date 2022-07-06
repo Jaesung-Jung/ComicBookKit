@@ -25,29 +25,29 @@ import XCTest
 @testable import ComicBookKit
 
 class ZIPHandleTests: XCTestCase, BundleResourceAccessible {
-    func testCreation() {
-        let handle1 = ZIPHandle(path: zipURL.path)
-        let handle2 = ZIPHandle(path: zipURL.path)
-        XCTAssertNotNil(handle1)
-        XCTAssertNotNil(handle2)
-    }
+  func testCreation() {
+    let handle1 = ZIPHandle(path: zipURL.path)
+    let handle2 = ZIPHandle(path: zipURL.path)
+    XCTAssertNotNil(handle1)
+    XCTAssertNotNil(handle2)
+  }
 
-    func testAttributesWithIteration() {
-        let handle = ZIPHandle(path: zipURL.path)!
-        let attributes = handle
-            .map { $0.attributes() }
-            .filter {
-                !$0.isDirectory && !$0.isHidden && !$0.path.hasPrefix("__MACOSX/")
-            }
-            .sorted()
+  func testAttributesWithIteration() {
+    let handle = ZIPHandle(path: zipURL.path)!
+    let attributes = handle
+      .map { $0.attributes() }
+      .filter {
+        !$0.isDirectory && !$0.isHidden && !$0.path.hasPrefix("__MACOSX/")
+      }
+      .sorted()
 
-        XCTAssertEqual(attributes.map { $0.path }, ["01.jpg", "02.jpg", "03.jpg", "04.jpg", "05.jpg", "06.jpg"])
-    }
+    XCTAssertEqual(attributes.map { $0.path }, ["01.jpg", "02.jpg", "03.jpg", "04.jpg", "05.jpg", "06.jpg"])
+  }
 
-    func testRead() {
-        let handle = ZIPHandle(path: zipURL.path)!
-        handle.openCurrentFile()
-        XCTAssertEqual(handle.read(length: 10)?.count, 10)
-        handle.closeCurrentFile()
-    }
+  func testRead() {
+    let handle = ZIPHandle(path: zipURL.path)!
+    handle.openCurrentFile()
+    XCTAssertEqual(handle.read(length: 10)?.count, 10)
+    handle.closeCurrentFile()
+  }
 }

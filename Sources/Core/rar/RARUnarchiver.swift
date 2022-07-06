@@ -25,52 +25,52 @@ import Foundation
 import RARKitPrivate
 
 class RARUnarchiver {
-    typealias Attributes = RARFileAttributes
+  typealias Attributes = RARFileAttributes
 
-    private let handle: RARHandle
+  private let handle: RARHandle
 
-    let fileURL: URL
-    var isEncrypted: Bool {
-        return handle.isEncrypted
+  let fileURL: URL
+  var isEncrypted: Bool {
+    return handle.isEncrypted
+  }
+
+  lazy var fileAttributes: [Attributes] = {
+    self.handle.attributes()
+      .filter { !$0.isDirectory }
+      .sorted { (lhs, rhs) in
+        lhs.name < rhs.name
+      }
+  }()
+
+  init?(constensOf url: URL, password: String?) {
+    guard let handle = RARHandle(path: url.path, password: password) else {
+      return nil
     }
+    self.handle = handle
+    self.fileURL = url
+  }
 
-    lazy var fileAttributes: [Attributes] = {
-        self.handle.attributes()
-            .filter { !$0.isDirectory }
-            .sorted { (lhs, rhs) in
-                lhs.name < rhs.name
-            }
-    }()
-
-    init?(constensOf url: URL, password: String?) {
-        guard let handle = RARHandle(path: url.path, password: password) else {
-            return nil
-        }
-        self.handle = handle
-        self.fileURL = url
+  func unarchive(at index: Int, length: UInt = 0) -> Data? {
+    guard let attributes = attributes(at: index) else {
+      return nil
     }
+    return unarchive(name: attributes.name, length: length)
+  }
 
-    func unarchive(at index: Int, length: UInt = 0) -> Data? {
-        guard let attributes = attributes(at: index) else {
-            return nil
-        }
-        return unarchive(name: attributes.name, length: length)
-    }
+  func unarchive(name: String, length: UInt = 0) -> Data? {
+    return handle.read(withName: name, length: length)
+  }
 
-    func unarchive(name: String, length: UInt = 0) -> Data? {
-        return handle.read(withName: name, length: length)
-    }
-
-    func validatePassword(_ password: String) -> Bool {
-        return handle.validatePassword(password)
-    }
+  func validatePassword(_ password: String) -> Bool {
+    return handle.validatePassword(password)
+  }
 }
 
 extension RARUnarchiver {
-    private func attributes(at index: Int) -> Attributes? {
-        guard fileAttributes.indices.contains(index) else {
-            return nil
-        }
-        return fileAttributes[index]
+  private func attributes(at index: Int) -> Attributes? {
+    guard fileAttributes.indices.contains(index) else {
+      return nil
     }
+    return fileAttributes[index]
+  }
 }

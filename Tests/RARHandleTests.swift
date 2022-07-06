@@ -26,26 +26,26 @@ import RARKitPrivate
 @testable import ComicBookKit
 
 class RARHandleTests: XCTestCase, BundleResourceAccessible {
-    func testAttributes() {
-        let handle = RARHandle(path: rarURL.path)!
-        let attributes = handle.attributes()
-        XCTAssertEqual(attributes.map { $0.name }, ["01.jpg", "02.jpg", "03.jpg", "04.jpg", "05.jpg", "06.jpg"])
-    }
+  func testAttributes() {
+    let handle = RARHandle(path: rarURL.path)!
+    let attributes = handle.attributes()
+    XCTAssertEqual(attributes.map { $0.name }, ["01.jpg", "02.jpg", "03.jpg", "04.jpg", "05.jpg", "06.jpg"])
+  }
 
-    func testRead() {
-        let handle = RARHandle(path: rarURL.path)!
-        let attributes = handle.attributes()
-        let data = handle.read(withName: attributes[0].name)
-        XCTAssertNotNil(data)
+  func testRead() {
+    let handle = RARHandle(path: rarURL.path)!
+    let attributes = handle.attributes()
+    let data = handle.read(withName: attributes[0].name)
+    XCTAssertNotNil(data)
 
-        let image = UIImage(data: data!)
-        XCTAssertNotNil(image)
-    }
-
-    func testReadWithLength() {
-        let handle = RARHandle(path: rarURL.path)!
-        let attributes = handle.attributes()
-        XCTAssertEqual(handle.read(withName: attributes[0].name, length: 256)?.count, 256)
-        XCTAssertEqual(handle.read(withName: attributes[0].name, length: 1)?.count, 1)
-    }
+    let image = UIImage(data: data!)
+    XCTAssertNotNil(image)
+  }
+  
+  func testReadWithLength() {
+    let handle = RARHandle(path: rarURL.path)!
+    let attributes = handle.attributes()
+    XCTAssertEqual(handle.read(withName: attributes[0].name, length: 256)?.count, 256)
+    XCTAssertEqual(handle.read(withName: attributes[0].name, length: 1)?.count, 1)
+  }
 }

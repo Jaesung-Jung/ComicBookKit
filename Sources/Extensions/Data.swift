@@ -24,20 +24,20 @@
 import Foundation
 
 extension Data {
-    func hasPrefix(_ data: Data) -> Bool {
-        return prefix(data.count) == data
-    }
+  func hasPrefix(_ data: Data) -> Bool {
+    return prefix(data.count) == data
+  }
 
-    func fixedWidthInteger<T>(_ type: T.Type) -> T where T: FixedWidthInteger {
-        var value: T = 0
-        let memorySize = MemoryLayout<T>.size
-        Swift.withUnsafeMutableBytes(of: &value) { mutablePointer in
-            if memorySize < count {
-                mutablePointer.copyBytes(from: self[..<memorySize])
-            } else {
-                mutablePointer.copyBytes(from: self)
-            }
-        }
-        return value
+  func fixedWidthInteger<T>(_ type: T.Type) -> T where T: FixedWidthInteger {
+    var value: T = 0
+    let memorySize = MemoryLayout<T>.size
+    Swift.withUnsafeMutableBytes(of: &value) { mutablePointer in
+      if memorySize < count {
+        mutablePointer.copyBytes(from: self[..<memorySize])
+      } else {
+        mutablePointer.copyBytes(from: self)
+      }
     }
+    return value
+  }
 }

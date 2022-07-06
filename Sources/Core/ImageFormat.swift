@@ -24,35 +24,35 @@
 import Foundation
 
 enum ImageFormat {
-    case bmp
-    case jpeg
-    case gif
-    case png
+  case bmp
+  case jpeg
+  case gif
+  case png
 
-    init?(data: Data) {
-        if data.hasPrefix(ImageFormat.bmp.signature) {
-            self = .bmp
-        } else if data.hasPrefix(ImageFormat.jpeg.signature) {
-            self = .jpeg
-        } else if data.hasPrefix(ImageFormat.gif.signature) {
-            self = .gif
-        } else if data.hasPrefix(ImageFormat.png.signature) {
-            self = .png
-        } else {
-            return nil
-        }
+  init?(data: Data) {
+    if data.hasPrefix(ImageFormat.bmp.signature) {
+      self = .bmp
+    } else if data.hasPrefix(ImageFormat.jpeg.signature) {
+      self = .jpeg
+    } else if data.hasPrefix(ImageFormat.gif.signature) {
+      self = .gif
+    } else if data.hasPrefix(ImageFormat.png.signature) {
+      self = .png
+    } else {
+      return nil
     }
+  }
 
-    var signature: Data {
-        switch self {
-        case .bmp:
-            return Data([0x42, 0x4D])
-        case .jpeg:
-            return Data([0xFF, 0xD8])
-        case .gif:
-            return Data([0x47, 0x49, 0x46])
-        case .png:
-            return Data([0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A])
-        }
+  var signature: Data {
+    switch self {
+    case .bmp:
+      return Data([0x42, 0x4D])
+    case .jpeg:
+      return Data([0xFF, 0xD8])
+    case .gif:
+      return Data([0x47, 0x49, 0x46])
+    case .png:
+      return Data([0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A])
     }
+  }
 }

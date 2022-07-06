@@ -22,97 +22,97 @@
 //  THE SOFTWARE.
 
 class KeyList<T: Hashable> {
-    private var head: Node?
-    private var tail: Node?
-    private(set) var count: Int = 0
-
-    func append(_ value: T) {
-        let node = Node(value: value)
-        if head === tail {
-            if head == nil && tail == nil {
-                head = node
-                tail = node
-            } else {
-                head?.next = node
-                tail = node
-            }
-        } else {
-            tail?.next = node
-            tail = node
-        }
-        count += 1
+  private var head: Node?
+  private var tail: Node?
+  private(set) var count: Int = 0
+  
+  func append(_ value: T) {
+    let node = Node(value: value)
+    if head === tail {
+      if head == nil && tail == nil {
+        head = node
+        tail = node
+      } else {
+        head?.next = node
+        tail = node
+      }
+    } else {
+      tail?.next = node
+      tail = node
     }
-
-    func moveToLast(value: T) {
-        guard tail?.value != value else {
-            return
-        }
-        guard head?.value != value else {
-            let target = head
-            head = head?.next
-            tail?.next = target
-            tail = target
-            target?.next = nil
-            return
-        }
-        var target = head
-        repeat {
-            if target?.next?.value == value {
-                let node = target?.next
-                target?.next = node?.next
-                tail?.next = node
-                tail = node
-                node?.next = nil
-                return
-            }
-            target = target?.next
-        } while target?.next != nil
+    count += 1
+  }
+  
+  func moveToLast(value: T) {
+    guard tail?.value != value else {
+      return
     }
-
-    @discardableResult
-    func removeFirst() -> T? {
-        defer {
-            count = Swift.max(count - 1, 0)
-        }
-        if head === tail {
-            head = nil
-            tail = nil
-            return nil
-        }
-        else {
-            let value = head?.value
-            head = head?.next
-            return value
-        }
+    guard head?.value != value else {
+      let target = head
+      head = head?.next
+      tail?.next = target
+      tail = target
+      target?.next = nil
+      return
     }
-
-    class Node {
-        let value: T
-        var next: Node?
-
-        init(value: T) {
-            self.value = value
-        }
+    var target = head
+    repeat {
+      if target?.next?.value == value {
+        let node = target?.next
+        target?.next = node?.next
+        tail?.next = node
+        tail = node
+        node?.next = nil
+        return
+      }
+      target = target?.next
+    } while target?.next != nil
+  }
+  
+  @discardableResult
+  func removeFirst() -> T? {
+    defer {
+      count = Swift.max(count - 1, 0)
     }
+    if head === tail {
+      head = nil
+      tail = nil
+      return nil
+    }
+    else {
+      let value = head?.value
+      head = head?.next
+      return value
+    }
+  }
+  
+  class Node {
+    let value: T
+    var next: Node?
+    
+    init(value: T) {
+      self.value = value
+    }
+  }
 }
 
 extension KeyList: Sequence {
-    class Iterator: IteratorProtocol {
-        var target: Node?
-
-        init(target: Node?) {
-            self.target = target
-        }
-
-        func next() -> T? {
-            defer {
-                target = target?.next
-            }
-            return target?.value
-        }
+  class Iterator: IteratorProtocol {
+    var target: Node?
+    
+    init(target: Node?) {
+      self.target = target
     }
-
-    func makeIterator() -> KeyList<T>.Iterator {
-        return Iterator(target: head)
+    
+    func next() -> T? {
+      defer {
+        target = target?.next
+      }
+      return target?.value
     }
+  }
+  
+  func makeIterator() -> KeyList<T>.Iterator {
+    return Iterator(target: head)
+  }
 }

@@ -25,26 +25,26 @@ import XCTest
 @testable import ComicBookKit
 
 class CacheTests: XCTestCase {
-    func testCache() {
-        let cache = Cache<String, Int>(capacity: 3)
-        cache.setValue(1, forKey: "one")
-        cache.setValue(2, forKey: "two")
-        cache.setValue(3, forKey: "three")
+  func testCache() {
+    let cache = Cache<String, Int>(capacity: 3)
+    cache.setValue(1, forKey: "one")
+    cache.setValue(2, forKey: "two")
+    cache.setValue(3, forKey: "three")
 
-        XCTAssertEqual(cache["one"], 1)
-        XCTAssertEqual(cache["two"], 2)
-        XCTAssertEqual(cache["three"], 3)
-        XCTAssertEqual(cache.keys.map { $0 }, ["one", "two", "three"])
+    XCTAssertEqual(cache["one"], 1)
+    XCTAssertEqual(cache["two"], 2)
+    XCTAssertEqual(cache["three"], 3)
+    XCTAssertEqual(cache.keys.map { $0 }, ["one", "two", "three"])
 
-        cache.setValue(4, forKey: "four")
-        XCTAssertEqual(cache["four"], 4)
-        XCTAssertNil(cache["one"])
-        XCTAssertEqual(cache.keys.map { $0 }, ["two", "three", "four"])
+    cache.setValue(4, forKey: "four")
+    XCTAssertEqual(cache["four"], 4)
+    XCTAssertNil(cache["one"])
+    XCTAssertEqual(cache.keys.map { $0 }, ["two", "three", "four"])
 
-        cache.setValue(2, forKey: "two")
-        XCTAssertEqual(cache.keys.map { $0 }, ["three", "four", "two"])
+    cache.setValue(2, forKey: "two")
+    XCTAssertEqual(cache.keys.map { $0 }, ["three", "four", "two"])
 
-        cache.setValue(5, forKey: "five")
-        XCTAssertEqual(cache.keys.map { $0 }, ["four", "two", "five"])
-    }
+    cache.setValue(5, forKey: "five")
+    XCTAssertEqual(cache.keys.map { $0 }, ["four", "two", "five"])
+  }
 }

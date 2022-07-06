@@ -24,72 +24,73 @@
 import Foundation
 
 public class CBZDocument: ComicBookDocument<UInt64> {
-    private let unarchiver: ZIPUnarchiver
-    public let url: URL
+  private let unarchiver: ZIPUnarchiver
 
-    public override var isEncrypted: Bool {
-        return unarchiver.isEncrypted
+  public let url: URL
+
+  public override var isEncrypted: Bool {
+    return unarchiver.isEncrypted
+  }
+
+  public override var password: String? {
+    didSet {
+      guard password != oldValue else {
+        return
+      }
+      unarchiver.password = password
+      if pages.isEmpty {
+        pages = makePages(unarchiver: unarchiver)
+      }
     }
+  }
 
-    public override var password: String? {
-        didSet {
-            guard password != oldValue else {
-                return
-            }
-            unarchiver.password = password
-            if pages.isEmpty {
-                pages = makePages(unarchiver: unarchiver)
-            }
+  public init?(url: URL, rightToLeft: Bool = false) {
+    guard let unarchiver = ZIPUnarchiver(contentsOf: url) else {
+      return nil
+    }
+    self.unarchiver = unarchiver
+    self.url = url
+    super.init()
+    self.rightToLeft = rightToLeft
+    self.pages = makePages(unarchiver: unarchiver)
+  }
+
+  override func data(of offset: UInt64) -> Data? {
+    return unarchiver.unarchive(offset: offset)
+  }
+
+  override func validatePassword(_ password: String) -> Bool {
+    return unarchiver.validatePassword(password)
+  }
+
+  private func makePages(unarchiver: ZIPUnarchiver) -> [ComicBookDocumentPage] {
+    return unarchiver.fileAttributes
+      .compactMap { unarchiver.iterator(offset: $0.offset) }
+      .flatMap { iterator -> [ComicBookDocumentPage] in
+        var data = Data()
+        var format: ImageFormat?
+        while let next = iterator.next() {
+          data.append(next)
+          if format == nil {
+            format = ImageFormat(data: data)
+          }
+          guard let format = format else {
+            return []
+          }
+          guard let size = imageSize(of: data, format: format) else {
+            continue
+          }
+
+          if size.width > size.height {
+            let left = ComicBookDocumentPage(key: iterator.offset, size: size, method: .left)
+            let right = ComicBookDocumentPage(key: iterator.offset, size: size, method: .right)
+            return rightToLeft ? [right, left] : [left, right]
+          } else {
+            let page = ComicBookDocumentPage(key: iterator.offset, size: size, method: .fill)
+            return [page]
+          }
         }
-    }
-
-    public init?(url: URL, rightToLeft: Bool = false) {
-        guard let unarchiver = ZIPUnarchiver(contentsOf: url) else {
-            return nil
-        }
-        self.unarchiver = unarchiver
-        self.url = url
-        super.init()
-        self.rightToLeft = rightToLeft
-        self.pages = makePages(unarchiver: unarchiver)
-    }
-
-    override func data(of offset: UInt64) -> Data? {
-        return unarchiver.unarchive(offset: offset)
-    }
-
-    override func validatePassword(_ password: String) -> Bool {
-        return unarchiver.validatePassword(password)
-    }
-
-    private func makePages(unarchiver: ZIPUnarchiver) -> [ComicBookDocumentPage] {
-        return unarchiver.fileAttributes
-            .compactMap { unarchiver.iterator(offset: $0.offset) }
-            .flatMap { iterator -> [ComicBookDocumentPage] in
-                var data = Data()
-                var format: ImageFormat?
-                while let next = iterator.next() {
-                    data.append(next)
-                    if format == nil {
-                        format = ImageFormat(data: data)
-                    }
-                    guard let format = format else {
-                        return []
-                    }
-                    guard let size = imageSize(of: data, format: format) else {
-                        continue
-                    }
-                    
-                    if size.width > size.height {
-                        let left = ComicBookDocumentPage(key: iterator.offset, size: size, method: .left)
-                        let right = ComicBookDocumentPage(key: iterator.offset, size: size, method: .right)
-                        return rightToLeft ? [right, left] : [left, right]
-                    } else {
-                        let page = ComicBookDocumentPage(key: iterator.offset, size: size, method: .fill)
-                        return [page]
-                    }
-                }
-                return []
-        }
-    }
+        return []
+      }
+  }
 }

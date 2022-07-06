@@ -22,55 +22,55 @@
 //  THE SOFTWARE.
 
 class Cache<K : Hashable, V> {
-    private var storage: [K: V] = [:]
-
-    let keys = KeyList<K>()
-    var capacity: Int
-
-    init(capacity: Int) {
-        self.capacity = capacity
+  private var storage: [K: V] = [:]
+  
+  let keys = KeyList<K>()
+  var capacity: Int
+  
+  init(capacity: Int) {
+    self.capacity = capacity
+  }
+  
+  func setValue(_ value: V, forKey key: K) {
+    if capacity == keys.count {
+      let first = keys.removeFirst()!
+      storage.removeValue(forKey: first)
     }
-
-    func setValue(_ value: V, forKey key: K) {
-        if capacity == keys.count {
-            let first = keys.removeFirst()!
-            storage.removeValue(forKey: first)
-        }
-        if storage[key] != nil {
-            keys.moveToLast(value: key)
-        } else {
-            keys.append(key)
-        }
-        storage[key] = value
+    if storage[key] != nil {
+      keys.moveToLast(value: key)
+    } else {
+      keys.append(key)
     }
-
-    func value(forKey key: K) -> V? {
-        return storage[key]
-    }
-
-    subscript(key: K) -> V? {
-        get { return storage[key] }
-        set { storage[key] = newValue }
-    }
+    storage[key] = value
+  }
+  
+  func value(forKey key: K) -> V? {
+    return storage[key]
+  }
+  
+  subscript(key: K) -> V? {
+    get { return storage[key] }
+    set { storage[key] = newValue }
+  }
 }
 
 extension Cache: Collection {
-    typealias Element = (K, V)
-    typealias Index = Dictionary<K, V>.Index
-
-    var startIndex: Index {
-        return storage.startIndex
-    }
-    
-    var endIndex: Index {
-        return storage.endIndex
-    }
-    
-    func index(after i: Index) -> Index {
-        return storage.index(after: i)
-    }
-
-    subscript(position: Index) -> Element {
-        return storage[position]
-    }
+  typealias Element = (K, V)
+  typealias Index = Dictionary<K, V>.Index
+  
+  var startIndex: Index {
+    return storage.startIndex
+  }
+  
+  var endIndex: Index {
+    return storage.endIndex
+  }
+  
+  func index(after i: Index) -> Index {
+    return storage.index(after: i)
+  }
+  
+  subscript(position: Index) -> Element {
+    return storage[position]
+  }
 }

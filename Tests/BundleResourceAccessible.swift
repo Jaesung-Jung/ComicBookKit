@@ -27,35 +27,35 @@ protocol BundleResourceAccessible {
 }
 
 extension BundleResourceAccessible where Self: XCTestCase {
-    func url(name: String, withExtension ext: String) -> URL {
-        return Bundle(for: type(of: self)).url(forResource: name, withExtension: ext)!
-    }
+  func url(name: String, withExtension ext: String) -> URL {
+    return Bundle(for: type(of: self)).url(forResource: name, withExtension: ext)!
+  }
 
-    func resource(name: String, withExtension ext: String) -> Data {
-        return try! Data(contentsOf: url(name: name, withExtension: ext))
-    }
+  func resource(name: String, withExtension ext: String) -> Data {
+    return try! Data(contentsOf: url(name: name, withExtension: ext))
+  }
 
-    var zipURL: URL {
-        return url(name: "sample", withExtension: "zip")
-    }
+  var zipURL: URL {
+    return url(name: "sample", withExtension: "zip")
+  }
 
-    var rarURL: URL {
-        return url(name: "sample", withExtension: "rar")
-    }
+  var rarURL: URL {
+    return url(name: "sample", withExtension: "rar")
+  }
 
-    var bmp: Data {
-        return resource(name: "bmp", withExtension: "bmp")
-    }
+  var bmp: Data {
+    return resource(name: "bmp", withExtension: "bmp")
+  }
 
-    var gif: Data {
-        return resource(name: "gif", withExtension: "gif")
-    }
+  var gif: Data {
+    return resource(name: "gif", withExtension: "gif")
+  }
 
-    var jpeg: Data {
-        return resource(name: "jpeg", withExtension: "jpg")
-    }
+  var jpeg: Data {
+    return resource(name: "jpeg", withExtension: "jpg")
+  }
 
-    var png: Data {
-        return resource(name: "png", withExtension: "png")
-    }
+  var png: Data {
+    return resource(name: "png", withExtension: "png")
+  }
 }
